@@ -10,66 +10,26 @@ int main (int argc, char* argv[])
 	bdd x0 = bdd_new_var_last(bddm);
 	bdd x1 = bdd_new_var_last(bddm);
 	bdd x2 = bdd_new_var_last(bddm);
-
-	// compute y = (x0.x1)+x2
-	bdd a  = bdd_and (bddm,x0,x1);	
-	bdd y  = bdd_or (bddm,x2,a);	
-
-	// compute z = (x0 + x2).(x1 + x2)
-	bdd b = bdd_or (bddm, x0,x2);
-	bdd c = bdd_or (bddm, x1,x2);
-	bdd z = bdd_and (bddm, b, c);
-
+	bdd x3 = bdd_new_var_last(bddm);
+	bdd x4 = bdd_new_var_last(bddm);
+	bdd x5 = bdd_new_var_last(bddm);
 	
-
+	bdd a  = bdd_and (bddm,x0,x1);	
+	bdd b  = bdd_and (bddm,x2,x3);
+	bdd c  = bdd_and (bddm,x4,x5);
+	
+	bdd d  = bdd_not (bddm,a);	
+	bdd e  = bdd_not (bddm,b);
+	bdd f  = bdd_not (bddm,c);
+	
+	bdd x  = bdd_and (bddm,d,e);	
+	bdd y  = bdd_and (bddm,x,f);
+	
 	printf("----------------------------------------------------\n");
 
 	// print y
 	bdd_print_bdd(bddm,y,NULL, NULL,NULL, stdout);
-
-	// are z and y the same?
-	if (z == y)
-	{
-		printf("Equal\n");
-	}	
-	else
-	{
-		printf("Not Equal\n");
-		// print z
-		bdd_print_bdd(bddm,z,NULL, NULL,NULL, stdout);
-	}
-
-
-	printf("----------------------------------------------------\n");
-
-	// compute w = (x0 + x2) + (x1 + x2)
-	bdd w = bdd_or (bddm, b,c);
-	bdd_print_bdd(bddm,w,NULL, NULL,NULL, stdout);
-
-	// are w and y the same? of course not.
-	if (w == y)
-	{
-		printf("Equal\n");
-	}	
-	else
-	{
-		// you should get this.
-		printf("Not Equal\n");
-	}
-
-	printf("----------------------------------------------------\n");
-
-	// Existential quantification example.
-	bdd x4 = bdd_new_var_last(bddm);
-	bdd p = bdd_and(bddm, x4, z);
-	bdd Q[2];
-	Q[0] = x0; Q[1] = 0;
-	int assoc = bdd_new_assoc(bddm,Q,0);
-	bdd_assoc(bddm,assoc);
-
-	bdd pq = bdd_exists(bddm,p);
-	bdd_print_bdd(bddm,pq,NULL, NULL,NULL, stdout);
-
+	
 	return(0);
 }
 
